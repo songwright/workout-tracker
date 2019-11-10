@@ -153,7 +153,7 @@ function populateChart(data) {
             "#e8c3b9",
             "#c45850"
           ],
-          data: [2478, 5267, 734, 784, 433]
+          data: [2478, 5267, 734, 784, 433] //modify to reflect data
         }
       ]
     },
@@ -168,14 +168,37 @@ function populateChart(data) {
 
 function duration(data) {
   let durations = [];
-
+  let sumDuration=0; // Summarizes duration for a day.
+   let daysOfWeek=[0,0,0,0,0,0,0] // An array the sum of the durations for each day of the week.
+   let temp=0;//stores the previous number of day of the week
   data.forEach(workout => {
+    var exerciseDate = new Date(workout.day);
+
+  
+    var exerciseDayNumOfWeek = exerciseDate.getDay();
+
+
+    //summarizes all the duration for same day
+    //if different days of week, reset the sumDuration
+    if( exerciseDayNumOfWeek != temp){
+      sumDuration=0;
+    }
+
+    console.log("day:",  exerciseDayNumOfWeek)
+     
+
     workout.exercises.forEach(exercise => {
+
       durations.push(exercise.duration);
+      sumDuration +=exercise.duration
+      daysOfWeek[exerciseDayNumOfWeek]=sumDuration;
+      temp=exerciseDayNumOfWeek;
     });
   });
+  console.log("durations",durations)
 
-  return durations;
+// Change to reflect 7 days.
+  return daysOfWeek;
 }
 
 function benchPress(data) {
