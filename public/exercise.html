@@ -35,12 +35,17 @@
             <div class="cardio-form d-none">
               <div class="cardio-name">
                 <label for="cardio-name">Name:</label>
-                <input
+                <!-- <input
                   type="text"
                   name="cardio-name"
                   id="cardio-name"
                   placeholder="Running"
-                />
+                /> -->
+                <select name="cardio-name" id="cardio-name">
+                  <option disabled selected>Select Cardio Exercise</option>
+                  <option value="Running">Running</option>
+                  <option value="Rowing">Rowing</option>
+                </select>
               </div>
               <div class="distance">
                 <label for="distance">Distance (miles):</label>
@@ -64,12 +69,18 @@
             <div class="resistance-form d-none">
               <div class="exercise">
                 <label for="name">Exercise Name:</label>
-                <input
+                <!-- <input
                   type="text"
                   name="name"
                   id="name"
                   placeholder="Bench Press"
-                />
+                /> -->
+                <select name="name" id="name">
+                  <option disabled selected>Select Resistance Exercise</option>
+                  <option value="Bench Press">Bench Press</option>
+                  <option value="Dead Lift">Dead Lift</option>
+                  <option value="Squats">Squats</option>
+                </select>
               </div>
               <div class="weight">
                 <label for="weight">Weight (lbs):</label>
