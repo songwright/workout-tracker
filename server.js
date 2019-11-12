@@ -7,7 +7,6 @@ const PORT = 3000;
 const app = express();
 
 // If deployed, use the deployed database. Otherwise
-// var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 app.use(logger("dev"));
 
@@ -18,6 +17,7 @@ app.use(express.static("public"));
 
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://<dbuser>:<dbpassword>@ds033579.mlab.com:33579/heroku_l1tk3wz1";
 
+// mongoose.connect("mongodb://localhost/workout", {
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useFidAndModify: false
