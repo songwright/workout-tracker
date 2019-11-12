@@ -10,7 +10,7 @@ fetch("/api/workouts")
 function populateChart(data) {
   let durations = duration(data);
   let pounds = benchPress(data);
-  let workouts = workoutNames(data);
+  let workouts = workoutDurations(data);
   let line = document.querySelector("#canvas").getContext("2d");
   let bar = document.querySelector("#canvas2").getContext("2d");
   let pie = document.querySelector("#canvas3").getContext("2d");
@@ -119,7 +119,7 @@ function populateChart(data) {
       labels: ["Bench Press", "Running", "Dead Lifts", "Squats", "Rowing"],
       datasets: [
         {
-          label: "Excercises Performed",
+          label: "Workout Durations",
           backgroundColor: [
             "#3e95cd",
             "#8e5ea2",
@@ -134,7 +134,7 @@ function populateChart(data) {
     options: {
       title: {
         display: true,
-        text: "Excercises Performed"
+        text: "Workout Durations"
       }
     }
   });
@@ -167,16 +167,15 @@ function populateChart(data) {
 }
 
 function duration(data) {
-  let durations = [];
+  // let durations = [];
   let sumDuration=0; // Summarizes duration for a day.
-   let daysOfWeek=[0,0,0,0,0,0,0] // An array the sum of the durations for each day of the week.
-   let temp=0;//stores the previous number of day of the week
+  let daysOfWeek=[0,0,0,0,0,0,0] // An array of the sum of 
+  // the durations for each day of the week.
+  let temp=0;//stores the previous number of day of the week
   data.forEach(workout => {
     var exerciseDate = new Date(workout.day);
 
-  
     var exerciseDayNumOfWeek = exerciseDate.getDay();
-
 
     //summarizes all the duration for same day
     //if different days of week, reset the sumDuration
@@ -184,18 +183,14 @@ function duration(data) {
       sumDuration=0;
     }
 
-    console.log("day:",  exerciseDayNumOfWeek)
-     
-
     workout.exercises.forEach(exercise => {
 
-      durations.push(exercise.duration);
-      sumDuration +=exercise.duration
-      daysOfWeek[exerciseDayNumOfWeek]=sumDuration;
+      sumDuration += exercise.duration; // Add a day's duration to the sum.
+      daysOfWeek[exerciseDayNumOfWeek]=sumDuration; // Insert the
+      // duration for that day using exerciseDayNumOfWeek as the index.
       temp=exerciseDayNumOfWeek;
     });
   });
-  console.log("durations",durations)
 
 // Change to reflect 7 days.
   return daysOfWeek;
@@ -213,14 +208,45 @@ function benchPress(data) {
   return bench;
 }
 
-function workoutNames(data) {
-  let workouts = [];
-
+function workoutDurations(data) {
+  let sumBenchDuration = 0; // Summarizes Bench Press durations
+  let sumRunningDuration = 0; // Summarizes Running durations
+  let sumDeadDuration = 0; // Summarizes Dead Lifts durations
+  let sumSquatsDuration = 0; // Summarizes Squats durations
+  let sumRowingDuration = 0; // Summarizes Rowing durations
+  let workoutDuration = [0, 0, 0, 0, 0]; // An array the sum of
+  // the durations for each workout.
   data.forEach(workout => {
-    workout.exercises.forEach(exercise => {
-      workouts.push(exercise.name);
-    });
-  });
+    // Add up duration totals for each exercise.
+    workout.exercises.filter(exercise => {
+      let exName = exercise.name;
+      let duration = exercise.duration;
+      switch(exName) {
+        case "Bench Press":
+            sumBenchDuration += duration;
+            workoutDuration[0] = sumBenchDuration;
+            break;
+        case "Running":
+            sumRunningDuration += duration;
+            workoutDuration[1] = sumRunningDuration;
+            break;
+        case "Dead Lifts":
+            sumDeadDuration += duration;
+            workoutDuration[2] = sumDeadDuration;
+            break;
+        case "Squats":
+            sumSquatsDuration += duration;
+            workoutDuration[3] = sumSquatsDuration;
+            break;
+        case "Rowing":
+            sumRowingDuration += duration;
+            workoutDuration[4] = sumRowingDuration;
+            break;
+        default:
+          return;
+      }
+    })
+  })
+    return workoutDuration;
   
-  return workouts;
 }
