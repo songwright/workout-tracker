@@ -9,7 +9,7 @@ fetch("/api/workouts")
 
 function populateChart(data) {
   let durations = duration(data);
-  let pounds = benchPress(data);
+  let pounds = weightByDay(data);
   let workouts = workoutDurations(data);
   let totalResistance = resistanceWeight(data);
   let line = document.querySelector("#canvas").getContext("2d");
@@ -79,7 +79,7 @@ function populateChart(data) {
       ],
       datasets: [
         {
-          label: "Bench Press",
+          label: "Resistance by Day",
           data: pounds,
           backgroundColor: [
             "rgba(255, 99, 132, 0.2)",
@@ -159,7 +159,7 @@ function populateChart(data) {
     options: {
       title: {
         display: true,
-        text: "Total Resistance Weight (lbs.)"
+        text: "Total Resistance Weight"
       }
     }
   });
@@ -176,8 +176,8 @@ function duration(data) {
 
     var exerciseDayNumOfWeek = exerciseDate.getDay();
 
-    //summarizes all the duration for same day
-    //if different days of week, reset the sumDuration
+    // Summarize all weight values for a given day.
+    // If the day of the week is different, reset the sumDuration.
     if( exerciseDayNumOfWeek != temp){
       sumDuration=0;
     }
@@ -195,16 +195,36 @@ function duration(data) {
   return daysOfWeek;
 }
 
-function benchPress(data) {
-  let bench = [];
+function weightByDay(data) {
+  let dayWeight = 0; // Summarizes resistance weight for a given day
+  // the durations for each day of the week.
+  let daysOfTheWeek = [0, 0, 0, 0, 0, 0, 0]; // An array of the sum of
+  // the durations for each day of the week.
+  let temp = 0; //stores the number of the previous day of the week
 
   data.forEach(workout => {
+    var exerciseDate = new Date(workout.day);
+    var exerciseDayNumOfWeek = exerciseDate.getDay();
+
+    // Summarize all weight values for a given day
+    // If the day of the week is different, reset dayWeight.
+    if (exerciseDayNumOfWeek != temp) {
+      dayWeight = 0;
+    }
+
     workout.exercises.forEach(exercise => {
-      bench.push(exercise.weight);
+      if (isNaN(exercise.weight)) {
+        return;
+      } else {
+        dayWeight += exercise.weight; // Add the current day's weight to the total.
+        daysOfTheWeek[exerciseDayNumOfWeek] = dayWeight;
+        // Insert the weight for that day using exerciseDayNumOfWeek as the index.
+        temp = exerciseDayNumOfWeek;
+      }
     });
   });
-
-  return bench;
+  // Render total weight for each day of the week.
+  return daysOfTheWeek;
 }
 
 function workoutDurations(data) {
@@ -254,8 +274,8 @@ function resistanceWeight(data) {
   let sumBenchWeight = 0; // Summarizes Bench Press weight
   let sumDeadWeight = 0; // Summarizes Dead Lifts weight
   let sumSquatsWeight = 0; // Summarizes Squats weight
-  let totalWeight = [0, 0, 0]; // An array the sum of
-  // the durations for each workout.
+  let totalWeight = [0, 0, 0]; // An array of the sum of
+  // the weights for each resistance workout.
   data.forEach(workout => {
     // Add up weight totals for each exercise.
     workout.exercises.filter(exercise => {
