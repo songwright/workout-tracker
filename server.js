@@ -16,11 +16,11 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-// mongoose.connect("mongodb://songwright:xandra4heroku@ds033579.mlab.com:33579/heroku_l1tk3wz1", {
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://mongodb://<dbuser>:<dbpassword>@ds033579.mlab.com:33579/heroku_l1tk3wz1";
 
-mongoose.connect("mongodb://localhost/workout", {
+mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
-  useFindAndModify: false
+  useFidAndModify: false
 });
 
 // routes
