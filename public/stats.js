@@ -11,6 +11,7 @@ function populateChart(data) {
   let durations = duration(data);
   let pounds = benchPress(data);
   let workouts = workoutDurations(data);
+  let totalResistance = resistanceWeight(data);
   let line = document.querySelector("#canvas").getContext("2d");
   let bar = document.querySelector("#canvas2").getContext("2d");
   let pie = document.querySelector("#canvas3").getContext("2d");
@@ -142,25 +143,23 @@ function populateChart(data) {
   let donutChart = new Chart(pie2, {
     type: "doughnut",
     data: {
-      labels: ["Bench Press", "Running", "Dead Lifts", "Squats", "Rowing"],
+      labels: ["Bench Press", "Dead Lifts", "Squats"],
       datasets: [
         {
-          label: "Excercises Performed",
+          label: "Total Resistance Weight",
           backgroundColor: [
             "#3e95cd",
-            "#8e5ea2",
             "#3cba9f",
-            "#e8c3b9",
-            "#c45850"
+            "#e8c3b9"
           ],
-          data: [2478, 5267, 734, 784, 433] //modify to reflect data
+          data: totalResistance
         }
       ]
     },
     options: {
       title: {
         display: true,
-        text: "Excercises Performed"
+        text: "Total Resistance Weight (lbs.)"
       }
     }
   });
@@ -248,5 +247,37 @@ function workoutDurations(data) {
     })
   })
     return workoutDuration;
-  
+}
+
+// Add up total resistance weight for donut graph
+function resistanceWeight(data) {
+  let sumBenchWeight = 0; // Summarizes Bench Press weight
+  let sumDeadWeight = 0; // Summarizes Dead Lifts weight
+  let sumSquatsWeight = 0; // Summarizes Squats weight
+  let totalWeight = [0, 0, 0]; // An array the sum of
+  // the durations for each workout.
+  data.forEach(workout => {
+    // Add up weight totals for each exercise.
+    workout.exercises.filter(exercise => {
+      let exName = exercise.name;
+      let weight = exercise.weight;
+      switch(exName) {
+        case "Bench Press":
+            sumBenchWeight += weight;
+            totalWeight[0] = sumBenchWeight;
+            break;
+        case "Dead Lifts":
+            sumDeadWeight += weight;
+            totalWeight[1] = sumDeadWeight;
+            break;
+        case "Squats":
+            sumSquatsWeight += weight;
+            totalWeight[2] = sumSquatsWeight;
+            break;
+        default:
+          return;
+      }
+    })
+  })
+    return totalWeight;
 }
