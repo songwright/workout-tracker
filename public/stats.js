@@ -69,13 +69,13 @@ function populateChart(data) {
     type: "bar",
     data: {
       labels: [
+        "Sunday",
         "Monday",
         "Tuesday",
         "Wednesday",
         "Thursday",
         "Friday",
         "Saturday",
-        "Sunday"
       ],
       datasets: [
         {
