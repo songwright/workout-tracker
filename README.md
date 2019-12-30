@@ -2,7 +2,7 @@
 
 This is an app that allows you to view, create, and track daily workouts.
 
-![workout](https://user-images.githubusercontent.com/29614473/71567051-2fcf3080-2a71-11ea-8399-ffa8442958fe.png)
+![workout](https://user-images.githubusercontent.com/29614473/71567474-4d51c980-2a74-11ea-8cbf-31899dca7ee9.png)
 
 ## To open the app, [click here.](https://workout-tracker-rs.herokuapp.com)
 
