@@ -21,7 +21,7 @@ var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/workout";
 // mongoose.connect("mongodb://localhost/workout", {
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
-  useFidAndModify: false
+  useFindAndModify: false
 });
 
 // routes
